@@ -7,6 +7,7 @@ import { Component } from 'react';
 
 import { validateDocument, validatePassword } from '../src/models/register';
 import RegisterForm from './components/register-form/RegisterForm';
+import RegisterValidations from './contexts/RegisterValidations';
 
 class App extends Component {
   render() {
@@ -18,10 +19,17 @@ class App extends Component {
           align="center">
           Formulario de cadastro
         </Typography>
-        <RegisterForm
-          onSubmit={onSubmit.bind(this)}
-          validations={{ document: validateDocument, password: validatePassword, name: validatePassword }}
-        />
+        <RegisterValidations.Provider
+          value={
+            {
+              document: validateDocument,
+              password: validatePassword,
+              name: validatePassword
+            }}>
+          <RegisterForm
+            onSubmit={onSubmit.bind(this)}
+          />
+        </RegisterValidations.Provider>
       </Container>
     );
   }

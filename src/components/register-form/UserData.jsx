@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import RegisterValidations from "../../contexts/RegisterValidations";
 
-function UserData({ onSubmit, validations }) {
+function UserData({ onSubmit }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [errors, setErrors] = useState({
     password: { isValid: true, text: "" },
   });
+
+  const validations = useContext(RegisterValidations);
 
   function validateFields(event) {
     const { name, value } = event.target;

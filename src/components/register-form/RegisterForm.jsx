@@ -5,7 +5,7 @@ import DeliveryData from "./DeliveryData";
 import PersonalData from "./PersonalData";
 import UserData from "./UserData";
 
-function RegisterForm({ onSubmit, validations }) {
+function RegisterForm({ onSubmit }) {
   const [actualStep, setActualStep] = useState(0);
   const [collectedData, setDatas] = useState({});
   useEffect(() => {
@@ -15,9 +15,9 @@ function RegisterForm({ onSubmit, validations }) {
   });
 
   const forms = [
-    <UserData onSubmit={getData} validations={validations} />,
-    <PersonalData onSubmit={getData} validations={validations} />,
-    <DeliveryData onSubmit={getData} validations={validations} />,
+    <UserData onSubmit={getData} />,
+    <PersonalData onSubmit={getData} />,
+    <DeliveryData onSubmit={getData} />,
     <Typography variant="h5">Obrigado pelo cadastro</Typography>,
   ];
 
