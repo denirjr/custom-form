@@ -1,100 +1,54 @@
-import Button from "@material-ui/core/Button";
-import Switch from "@material-ui/core/Switch";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import React, { useState } from "react";
+import { Step, StepLabel, Stepper, Typography } from "@material-ui/core";
+import { useEffect, useState } from "react";
 
-function RegisterForm({ onSubmit, validateDocument }) {
-  const [name, setName] = useState("Denir");
-  const [lastName, setLastName] = useState("");
-  const [document, setDocument] = useState("");
-  const [promotions, setPromotions] = useState(true);
-  const [news, setNews] = useState(true);
-  const [errors, setErrors] = useState({
-    document: { isValid: true, text: "" },
+import DeliveryData from "./DeliveryData";
+import PersonalData from "./PersonalData";
+import UserData from "./UserData";
+
+function RegisterForm({ onSubmit, validations }) {
+  const [actualStep, setActualStep] = useState(0);
+  const [collectedData, setDatas] = useState({});
+  useEffect(() => {
+    if (actualStep === forms.length - 1) {
+      onSubmit(collectedData);
+    }
   });
 
+  const forms = [
+    <UserData onSubmit={getData} validations={validations} />,
+    <PersonalData onSubmit={getData} validations={validations} />,
+    <DeliveryData onSubmit={getData} validations={validations} />,
+    <Typography variant="h5">Obrigado pelo cadastro</Typography>,
+  ];
+
+  function getData(actualData) {
+    setDatas({ ...collectedData, ...actualData });
+    nextStep();
+  }
+
+  function nextStep() {
+    setActualStep(actualStep + 1);
+  }
+
   return (
-    <form
-      onSubmit={(event) => {
-        onSubmit({ name, lastName, document, promotions, news });
-        event.preventDefault();
-      }}
-    >
-      <TextField
-        value={name}
-        onChange={(event) => {
-          setName(event.target.value);
-        }}
-        margin="normal"
-        fullWidth
-        color="primary"
-        variant="outlined"
-        id="name"
-        label="Nome"
-      />
-      <TextField
-        value={lastName}
-        onChange={(event) => {
-          setLastName(event.target.value);
-        }}
-        margin="normal"
-        fullWidth
-        color="primary"
-        variant="outlined"
-        id="lastName"
-        label="Sobrenome"
-      />
-      <TextField
-        value={document}
-        onChange={(event) => {
-          setDocument(event.target.value);
-        }}
-        onBlur={(event) => {
-          const isValid = validateDocument(event.target.value);
-          setErrors({
-            document: isValid,
-          });
-        }}
-        error={!errors.document.isValid}
-        helperText={errors.document.text}
-        margin="normal"
-        fullWidth
-        color="primary"
-        variant="outlined"
-        id="document"
-        label="CPF"
-      />
+    <>
+      <Stepper activeStep={actualStep}>
+        <Step>
+          <StepLabel>Login</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Pessoal</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Entrega</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Finalização</StepLabel>
+        </Step>
+      </Stepper>
 
-      <FormControlLabel
-        label="promotions"
-        control={
-          <Switch
-            onChange={(event) => {
-              setPromotions(event.target.checked);
-            }}
-            id="promotions"
-            color="primary"
-            checked={promotions}
-            name="Promoções"
-          />
-        }
-      />
-
-      <FormControlLabel
-        checked={news}
-        onChange={(event) => {
-          setNews(event.target.checked);
-        }}
-        label="Novidades"
-        control={<Switch id="news" color="primary" name="Novidades" />}
-      />
-
-      <Button variant="contained" color="primary" type="submit">
-        Cadastrar
-      </Button>
-    </form>
+      {forms[actualStep]}
+    </>
   );
 }
-
 export default RegisterForm;

@@ -2,10 +2,11 @@ import './App.css';
 import '@fontsource/roboto';
 
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import { Component } from 'react';
 
+import { validateDocument, validatePassword } from '../src/models/register';
 import RegisterForm from './components/register-form/RegisterForm';
-import Typography from '@material-ui/core/Typography';
 
 class App extends Component {
   render() {
@@ -19,7 +20,7 @@ class App extends Component {
         </Typography>
         <RegisterForm
           onSubmit={onSubmit.bind(this)}
-          validateDocument={validateDocument}
+          validations={{ document: validateDocument, password: validatePassword, name: validatePassword }}
         />
       </Container>
     );
@@ -30,10 +31,5 @@ function onSubmit(data) {
   console.log('DATA ON APP COMPONENT ==>', data);
 }
 
-function validateDocument(document) {
-  return document.length !== 11 ?
-    { isValid: false, text: "O CPF deve ter 11 digitos" } :
-    { isValid: true, text: "" };
-}
 
 export default App;
