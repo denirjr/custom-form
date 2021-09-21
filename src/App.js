@@ -36,7 +36,7 @@ class App extends Component {
 }
 
 function onSubmit(data) {
-  console.log('DATA ON APP COMPONENT ==>', data);
+  console.log(data);
 }
 
 

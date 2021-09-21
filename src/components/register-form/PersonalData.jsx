@@ -4,35 +4,17 @@ import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import React, { useState, useContext } from "react";
 import RegisterValidations from "../../contexts/RegisterValidations";
+import useErrors from "../../hooks/useErros";
 
-function PersonalData({ onSubmit}) {
+function PersonalData({ onSubmit }) {
   const [name, setName] = useState("Denir");
   const [lastName, setLastName] = useState("");
   const [document, setDocument] = useState("");
   const [promotions, setPromotions] = useState(false);
   const [news, setNews] = useState(true);
-  const [errors, setErrors] = useState({
-    document: { isValid: true, text: "" },
-    name: { isValid: true, text: "" },
-  });
-
   const validations = useContext(RegisterValidations);
+  const [errors, validateFields, canISend] = useErrors(validations);
 
-  function validateFields(event) {
-    const { name, value } = event.target;
-    const newState = { ...errors };
-    newState[name] = validations[name](value);
-    setErrors(newState);
-  }
-
-  function canISend() {
-    for (let field in errors) {
-      if (!errors[field].isValid) {
-        return false;
-      }
-      return true;
-    }
-  }
   return (
     <form
       onSubmit={(event) => {
@@ -48,8 +30,8 @@ function PersonalData({ onSubmit}) {
           setName(event.target.value);
         }}
         onBlur={validateFields}
-        error={!errors.name.isValid}
-        helperText={errors.name.text}
+        error={!errors?.name?.isValid}
+        helperText={errors?.name?.text}
         margin="normal"
         fullWidth
         color="primary"
@@ -61,7 +43,7 @@ function PersonalData({ onSubmit}) {
       <TextField
         value={lastName}
         onChange={(event) => {
-          setLastName(event.target.value);
+          setLastName(event?.target?.value);
         }}
         margin="normal"
         fullWidth
@@ -73,11 +55,11 @@ function PersonalData({ onSubmit}) {
       <TextField
         value={document}
         onChange={(event) => {
-          setDocument(event.target.value);
+          setDocument(event?.target?.value);
         }}
         onBlur={validateFields}
-        error={!errors.document.isValid}
-        helperText={errors.document.text}
+        error={!errors?.document?.isValid}
+        helperText={errors?.document?.text}
         id="document"
         name="document"
         label="CPF"
